@@ -1,8 +1,7 @@
 //#include"ByteView.h"
 #include<stdio.h>
 #include<Windows.h>
-#define MaxColumn 20//×î´óÏÔÊ¾ÁĞÊı
-#define MaxLine 100//×î´óÏÔÊ¾ĞĞÊı
+#define MaxColumn 20//æœ€å¤§æ˜¾ç¤ºåˆ—æ•°
 
 
 
@@ -10,12 +9,12 @@ FILE* fp;
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
-		printf("#²ÎÊı´íÎó\n");
+		printf("#å‚æ•°é”™è¯¯\n");
 		return -1;
 	}
 	fp = fopen(argv[1],"rb+");
 	if (!fp) {
-		printf("#ÎÄ¼ş²»´æÔÚ\n");
+		printf("#æ–‡ä»¶ä¸å­˜åœ¨\n");
 		return -1;
 	}
 	fseek(fp, 0, SEEK_END);
@@ -30,7 +29,7 @@ int main(int argc, char* argv[]) {
 		if (a < 17)printf("0");
 		printf("%x,", a);
 	}
-	printf("\n#ÎÄ¼ş³¤¶È:%d\n", len);
-	printf("#ÎÄ¼şÏÔÊ¾Íê±Ï");
+	printf("\n#æ–‡ä»¶é•¿åº¦:%d\n", len);
+	printf("#æ–‡ä»¶æ˜¾ç¤ºå®Œæ¯•");
 	
 }
