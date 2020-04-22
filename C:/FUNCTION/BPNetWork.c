@@ -1,8 +1,5 @@
-#include<math.h>
 #include"BPNetWork.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+
 
 //神经网络的层数
 #define LS network->lns
@@ -48,8 +45,8 @@ BPNetWork* BPCreate(int* nums, int len,double ln)
 	network->is = malloc(nums[0] * sizeof(double));
 	network->las = malloc(sizeof(Layer) * (len - 1));
 	network->ts = malloc(sizeof(double) * nums[len - 1]);
+	srand(&network);//用networkd的内存地址做为随机数种子
 	for (int p = 0; p < len - 1; p++) {
-		srand(&p);
 		int lastnum = nums[p];//上一层的神经元数量
 		int num = nums[p + 1];//当前层的神经元数量
 		network->las[p].bs = malloc(sizeof(double) * num);
@@ -60,15 +57,16 @@ BPNetWork* BPCreate(int* nums, int len,double ln)
 		//
 		network->las[p].ss = malloc(sizeof(double) * num);
 		for (int pp = 0; pp < num; pp++) {
-			network->las[p].bs[pp] = 0.2;//rand() / 2.0 / RAND_MAX;
+			//这里rand()/2.0的意思是把整数除整数转换为浮点数除整数
+			//如果是整数除整数,输出则为带余的商
+			network->las[p].bs[pp] = rand() / 2.0 / RAND_MAX;
 			for (int ppp = 0; ppp < lastnum; ppp++) {
-				network->las[p].ws[ppp + pp * lastnum] = 0.5;//rand() / 2.0 / RAND_MAX;
+				network->las[p].ws[ppp + pp * lastnum] = rand() / 2.0 / RAND_MAX;
 			}
 		}
 	}
 	return network;
 }
-//运行一次神经网络
 void RunOnce(BPNetWork* network) {
 	//计算输入层到第二层
 	for (int a = 1; a <= NS(2); a++) {
@@ -96,13 +94,11 @@ void RunOnce(BPNetWork* network) {
 	}
 }
 
-//载入训练集
 void LoadIn(BPNetWork* network,double* input,double* putout) {
 	memcpy(network->is, input, INNS*sizeof(double));
 	memcpy(network->ts, putout, OUTNS*sizeof(double));
 }
 
-//反向传播一次(训练一次)
 void TrainOnce(BPNetWork* network) {
 	//计算输出层的误差函数
 	for (int a = 1; a <= OUTNS; a++) {
@@ -161,7 +157,6 @@ void TrainOnce(BPNetWork* network) {
 	}
 	
 }
-//输出总误差
 double ETotal(BPNetWork* network) {
 	double val = 0;
 	for (int a = 1; a <= OUTNS; a++) {
@@ -169,36 +164,35 @@ double ETotal(BPNetWork* network) {
 	}
 	return val;
 }
-
 int main() {
-	int a[] = { 1,20,20,1 };
-	double in[1] = { 0.5 };
-	double in1[1] = { 0.2 };
-
-
-	double out[1] = { 0.1 };
-
-
-
+	int a[] = { 1,20,20,1 };//4层神经元,数量分别为1,20,20,1
+	double in[1] = { 0.9 };//训练样本输入1
+	double in1[1] = { 0.1 };//训练样本输入2
+	double in2[1] = { 0.5 };//训练样本输入3
+	double out[1] = { 0.1 };//理想输出
+	//神经网络训练目标:
+	//输入任意值,输出0.1
 	BPNetWork* network = BPCreate(a, 4, 0.5);
-
-	double* l = &BF(3, 1);
-
-	LoadIn(network, in, out);
-
-	while (1)
-	{
+	int c = 1000;//训练1000次
+	while (c--) {
+		LoadIn(network, in, out);
 		RunOnce(network);
 		TrainOnce(network);
-		double a = OF(4, 1);
-		printf("%g\n", a);
+		LoadIn(network, in1, out);
+		RunOnce(network);
+		TrainOnce(network);
+		LoadIn(network, in2, out);
+		RunOnce(network);
+		TrainOnce(network);
 	}
-
-
-
-
-
-
+	//训练完后来一波测试
+	double t[1] = { 0.7 };//输入
+	double o[1] = { 0.2 };//凑数
+	LoadIn(network, t, o);
+	RunOnce(network);
+	printf("OK\n");
+	printf("%g\n", ETotal(network));
+	printf("%g", OF(4, 1));
 	return 0;
 }
 

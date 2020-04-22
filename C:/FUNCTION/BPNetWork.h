@@ -1,5 +1,11 @@
 #ifndef BPNETWORK_H
 #define BPNETWORK_H
+//所需头文件
+#include<math.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
 
 #define f(x) Sigmoid(x)//激活函数设定
 #define f_(x) Sigmoidf(x)//导函数
@@ -30,7 +36,12 @@ typedef struct {
 BPNetWork* BPCreate(int* nums, int len,double ln);
 //运行一次神经网络
 void RunOnce(BPNetWork* network);
-
+//载入训练集
+void LoadIn(BPNetWork* network, double* input, double* putout);
+//反向传播一次(训练一次)
+void TrainOnce(BPNetWork* network);
+//输出总误差
+double ETotal(BPNetWork* network);
 
 
 
