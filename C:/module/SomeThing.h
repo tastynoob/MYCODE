@@ -1,10 +1,8 @@
-#ifndef KEYS_H
-#define KEYS_H
 
-//指定循环次数,fre:循环次数,par:指定(循环次数-1)的参数名
+//鎸囧畾寰幆娆℃暟,fre:寰幆娆℃暟,par:鎸囧畾(寰幆娆℃暟-1)鐨勫弬鏁板悕
 #define cyc(fre,par)  \
 for (int par = 0; par < (fre); par++) 
-
+//蹇�熸瀯寤虹粨鏋勪綋
 #define defs(name) \
 struct name 
 
@@ -14,18 +12,3 @@ struct name
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
